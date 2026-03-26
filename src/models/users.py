@@ -1,7 +1,7 @@
-import datetime
 import enum
-from sqlalchemy import Column, Integer, String, Enum
-from src.models.base import Base
+from sqlalchemy import Column, Integer, String, Enum, DateTime
+from src.database import Base
+from sqlalchemy.orm import relationship
 
 
 class StatusEnum(enum.Enum):
@@ -20,6 +20,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String)
     password = Column(String)
-    created_at = Column(datetime.time, add_now=True)
+    created_at = Column(DateTime, add_now=True)
     status = Column(Enum)
     role = Column(Enum)
+    quests = relationship('Quiz', back_populates='users')
