@@ -1,8 +1,6 @@
-import enum
-
-from sqlalchemy import Column, String, Integer, ForeignKey, DateTime
+from sqlalchemy import Column, String, Integer, ForeignKey, Enum
 from sqlalchemy.orm import relationship
-from src.database import Base
+from src.models.base import Base
 
 
 class Question(Base):
@@ -11,5 +9,5 @@ class Question(Base):
     title = Column(String)
     description = Column(String)
     quiz_id = Column(Integer, ForeignKey('quiz.id'))
-    status = Column(enum.Enum)
+    status = Column(Enum)
     quiz = relationship('Quiz', back_populates='questions')
