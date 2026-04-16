@@ -52,5 +52,4 @@ class Token:
         return data
 
 
-
 jwt_token = Token()

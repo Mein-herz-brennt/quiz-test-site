@@ -12,6 +12,6 @@ class Quiz(Base):
     created_by = Column(Integer, ForeignKey('users.id'))
     created_at = Column(DateTime, default=datetime.datetime.utcnow())
     status = Column(Enum)
-    user = relationship('User', back_populates='quiz')
+    user = relationship('User', back_populates='quests')
     questions = relationship("Question", back_populates="quiz")
 
