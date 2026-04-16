@@ -8,7 +8,7 @@ from src.database import get_db
 from sqlalchemy.orm import Session
 from src.schemas.jwt import Token, RefreshToken
 from src.controllers.user import user_controller
-router = APIRouter(prefix="/api/auth")
+router = APIRouter(prefix="/api/auth", tags=["Auth"])
 
 
 @router.post("/register")
@@ -29,6 +29,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: 
 @router.post('/refresh', response_model=Token)
 async def refresh(data: RefreshToken):
     return user_controller.refresh(data)
+
 
 @router.get("/me")
 async def me(current_user: User = Depends(get_current_user)):
