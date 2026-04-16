@@ -1,10 +1,11 @@
 from src.security import verify_password
 from src.models.users import User
-from src.database import get_db
 from sqlalchemy.orm import Session
 from sqlalchemy import select
-from fastapi import Depends, HTTPException, status
 
+
+def register_user(db: Session, user: User):
+    db.add(user)
 
 def get_user_by_username(username: str, db: Session) -> User | None:
     user = db.execute(select(User).where(User.username == username)).scalar_one_or_none()

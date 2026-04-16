@@ -22,6 +22,6 @@ class User(Base):
     username = Column(String)
     password = Column(String)
     created_at = Column(DateTime, default=datetime.datetime.utcnow())
-    # status = Column(Enum)
-    # role = Column(Enum)
+    status = Column(Enum(StatusEnum))
+    role = Column(Enum(RoleEnum))
     quests = relationship('Quiz', back_populates='user')

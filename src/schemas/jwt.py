@@ -13,5 +13,5 @@ class TokenData(BaseModel):
 
 
 class RefreshToken(BaseModel):
-    access_token: str
+    refresh_token: str
     token_type: str
