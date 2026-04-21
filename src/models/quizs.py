@@ -14,4 +14,5 @@ class Quiz(Base):
     status = Column(Enum)
     user = relationship('User', back_populates='quests')
     questions = relationship("Question", back_populates="quiz")
+    results = relationship('Result', back_populates='quiz')
 

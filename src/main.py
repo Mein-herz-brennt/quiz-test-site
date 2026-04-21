@@ -4,7 +4,7 @@ from src.database import create_db
 import uvicorn
 
 create_db()
-app = FastAPI()
+app = FastAPI(title="Quiz Test Site", description="Quiz Test Site", version="1.0")
 app.include_router(auth_router)
 
 

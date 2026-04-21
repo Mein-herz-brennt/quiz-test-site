@@ -11,3 +11,4 @@ class Question(Base):
     quiz_id = Column(Integer, ForeignKey('quiz.id'))
     status = Column(Enum)
     quiz = relationship('Quiz', back_populates='questions')
+    answers = relationship('Answer', back_populates='question')

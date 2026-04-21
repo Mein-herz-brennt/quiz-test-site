@@ -25,3 +25,4 @@ class User(Base):
     status = Column(Enum(StatusEnum))
     role = Column(Enum(RoleEnum))
     quests = relationship('Quiz', back_populates='user')
+    results = relationship('Result', back_populates='user')
