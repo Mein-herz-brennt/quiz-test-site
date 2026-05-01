@@ -7,6 +7,7 @@ from sqlalchemy import select
 def register_user(db: Session, user: User):
     db.add(user)
 
+
 def get_user_by_username(username: str, db: Session) -> User | None:
     user = db.execute(select(User).where(User.username == username)).scalar_one_or_none()
     if not user:
