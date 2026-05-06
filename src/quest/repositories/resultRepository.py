@@ -1,12 +1,14 @@
 from typing import Sequence, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import select
+from fastapi import Depends
+from src.database import get_db
 from src.models.results import Results
 from src.quest.repositories.baseRepository import BaseRepository
 
 
 class ResultRepository(BaseRepository[Results]):
-    def __init__(self, db: Session):
+    def __init__(self, db: Session = Depends(get_db)):
         super().__init__(model=Results, db=db)
 
     def get_by_user(self, user_id: int) -> Sequence[Results]:

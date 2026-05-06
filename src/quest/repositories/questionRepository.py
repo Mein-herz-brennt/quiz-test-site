@@ -1,12 +1,14 @@
 from typing import Optional, Sequence
 from sqlalchemy.orm import Session
 from sqlalchemy import select
+from fastapi import Depends
+from src.database import get_db
 from src.models.questions import Question, QuestionStatus
 from src.quest.repositories.baseRepository import BaseRepository
 
 
 class QuestionRepository(BaseRepository[Question]):
-    def __init__(self, db: Session):
+    def __init__(self, db: Session = Depends(get_db)):
         super().__init__(model=Question, db=db)
 
     def get_by_quiz(self, quiz_id: int) -> Sequence[Question]:
