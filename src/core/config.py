@@ -1,8 +1,9 @@
 from pydantic_settings import BaseSettings
+from pydantic import BaseModel
 from decouple import config, Csv
 
 
-class JWTConfig(BaseSettings):
+class JWTConfig(BaseModel):
     ACCESS_SECRET_KEY: str = config('ACCESS_SECRET_KEY')
     REFRESH_SECRET_KEY: str = config('REFRESH_SECRET_KEY')
     _ACCESS_TIME_TO_EXPIRE: int = 30  # in minutes
@@ -43,10 +44,11 @@ class JWTConfig(BaseSettings):
 
 class Settings(BaseSettings):
     DATABASE_URL: str = config('DATABASE_URL', default='sqlite:///./quiz.db')
-    HOST: str = config('HOST', cast=Csv(), default='localhost,127.0.0.1')
+    HOST: list[str] = config('HOST', cast=Csv(), default='localhost,127.0.0.1')
     PORT: int = config('PORT', default=8080)
+    token: JWTConfig = JWTConfig()
     # DATABASE = config('DATABASE', cast=str, default='sqlite:///db.sqlite3')
 
 
 settings = Settings()
-jwt_settings = JWTConfig()
+# jwt_settings = JWTConfig()

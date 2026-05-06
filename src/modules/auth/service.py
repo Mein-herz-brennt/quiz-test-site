@@ -1,8 +1,10 @@
-import jwt
 import datetime
+import jwt
+from fastapi import HTTPException, status, Depends
 from jwt import ExpiredSignatureError, InvalidTokenError
 from src.core.config import settings
-from fastapi import HTTPException, status, Depends
+from src.modules.users.services import UserService
+from src.modules.auth.schemas import Token
 
 
 class TokenService:
@@ -11,28 +13,28 @@ class TokenService:
     def _create_token(data: dict, expires_delta: datetime.timedelta, secret: str) -> str:
         to_encode = data.copy()
         to_encode.update({'exp': datetime.datetime.utcnow() + expires_delta})
-        return jwt.encode(payload=to_encode, key=secret, algorithm=settings.ALGORITHM)
+        return jwt.encode(payload=to_encode, key=secret, algorithm=settings.token.algorithm)
 
     @classmethod
     def create_access_token(cls, username: str) -> str:
         return cls._create_token(
             data={"sub": username, "type": "access"},
-            expires_delta=datetime.timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
-            secret=settings.ACCESS_SECRET_KEY
+            expires_delta=datetime.timedelta(minutes=settings.token.access_time_to_expire),
+            secret=settings.token.ACCESS_SECRET_KEY
         )
 
     @classmethod
     def create_refresh_token(cls, username: str) -> str:
         return cls._create_token(
             data={"sub": username, "type": "refresh"},
-            expires_delta=datetime.timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS),
-            secret=settings.REFRESH_SECRET_KEY
+            expires_delta=datetime.timedelta(days=settings.token.refresh_time_to_expire),
+            secret=settings.token.REFRESH_SECRET_KEY
         )
 
     @staticmethod
     def get_access_payload(token: str) -> dict:
         try:
-            data = jwt.decode(token, settings.ACCESS_SECRET_KEY, algorithms=[settings.ALGORITHM])
+            data = jwt.decode(token, settings.token.ACCESS_SECRET_KEY, algorithms=[settings.token.algorithm])
         except ExpiredSignatureError:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token has expired")
         except InvalidTokenError:
@@ -42,7 +44,7 @@ class TokenService:
     @staticmethod
     def get_refresh_payload(token: str) -> dict:
         try:
-            data = jwt.decode(token, settings.REFRESH_SECRET_KEY, algorithms=[settings.ALGORITHM])
+            data = jwt.decode(token, settings.token.REFRESH_SECRET_KEY, algorithms=[settings.token.algorithm])
         except ExpiredSignatureError:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Refresh token has expired")
         except InvalidTokenError:
@@ -50,15 +52,11 @@ class TokenService:
         return data
 
 
-from src.modules.users.services import UserService
-from src.modules.auth.schemas import Token, RefreshTokenRequest
-
-
 class AuthService:
     def __init__(
-        self, 
-        user_service: UserService = Depends(UserService),
-        token_service: TokenService = Depends(lambda: jwt_token)
+            self,
+            user_service: UserService = Depends(UserService),
+            token_service: TokenService = Depends(lambda: jwt_token)
     ):
         self.user_service = user_service
         self.token_service = token_service
