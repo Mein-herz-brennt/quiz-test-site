@@ -1,20 +1,17 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from typing import Annotated
-from src.auth.service import jwt_token
-from src.models.users import User
+from src.modules.auth.service import jwt_token
+from src.modules.users.models import User
 from sqlalchemy import select
-from src.database import get_db
+from src.core.database import get_db
 from sqlalchemy.orm import Session
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Session = Depends(get_db)):
-    if not token:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
-
-    payload = jwt_token.get_payload(token)
+async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Session = Depends(get_db)) -> User | None:
+    payload = jwt_token.get_access_payload(token)
     if not payload:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Invalid token')
 
@@ -30,10 +27,3 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Se
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
     return user
-
-
-
-
-
-
-

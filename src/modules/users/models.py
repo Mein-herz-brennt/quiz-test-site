@@ -1,7 +1,7 @@
 import datetime
 import enum
 from sqlalchemy import Column, Integer, String, Enum, DateTime
-from src.models.base import Base
+from src.core.database import Base
 from sqlalchemy.orm import relationship
 
 
@@ -18,10 +18,13 @@ class RoleEnum(enum.Enum):
 
 class User(Base):
     __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
-    username = Column(String)
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True)
     password = Column(String)
-    created_at = Column(DateTime, default=datetime.datetime.utcnow())
-    status = Column(Enum(StatusEnum))
-    role = Column(Enum(RoleEnum))
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    status = Column(Enum(StatusEnum), default=StatusEnum.active)
+    role = Column(Enum(RoleEnum), default=RoleEnum.student)
+    
+    # Relationships
     quests = relationship('Quiz', back_populates='user')
+    results = relationship('Results', back_populates='user')

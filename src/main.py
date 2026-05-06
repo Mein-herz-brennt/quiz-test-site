@@ -1,11 +1,10 @@
 from fastapi import FastAPI
-from src.api.auth import router as auth_router
-from src.database import create_db
+from src.api.router import api_router
 import uvicorn
 
-create_db()
-app = FastAPI()
-app.include_router(auth_router)
+app = FastAPI(title="Quiz Test Site API")
+
+app.include_router(api_router)
 
 
 if __name__ == "__main__":

@@ -8,10 +8,9 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    sub: int
     username: str
+    type: str
 
 
-class RefreshToken(BaseModel):
+class RefreshTokenRequest(BaseModel):
     refresh_token: str
-    token_type: str
