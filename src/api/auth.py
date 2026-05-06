@@ -34,6 +34,8 @@ async def refresh(data: RefreshToken):
 @router.get("/me")
 async def me(current_user: User = Depends(get_current_user)):
     return {
-        'id': 12123123,
-        'mail': current_user.username + "@gmail.com"
+        'id': current_user.id,
+        'username': current_user.username,
+        'role': current_user.role,
+        'status': current_user.status,
     }

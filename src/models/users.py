@@ -18,10 +18,10 @@ class RoleEnum(enum.Enum):
 
 class User(Base):
     __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
-    username = Column(String)
+    id = Column(Integer, primary_key=True, unique=True)
+    username = Column(String, unique=True)
     password = Column(String)
-    created_at = Column(DateTime, default=datetime.datetime.utcnow())
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
     status = Column(Enum(StatusEnum))
     role = Column(Enum(RoleEnum))
     quests = relationship('Quiz', back_populates='user')

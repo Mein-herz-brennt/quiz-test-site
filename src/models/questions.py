@@ -18,4 +18,4 @@ class Question(Base):
     quiz_id = Column(Integer, ForeignKey('quiz.id'))
     status = Column(Enum(QuestionStatus), default=QuestionStatus.active)
     quiz = relationship('Quiz', back_populates='questions')
-    answears = relationship("Answears", back_populates="question")
+    answers = relationship("Answer", back_populates="question", cascade='all, delete-orphan')

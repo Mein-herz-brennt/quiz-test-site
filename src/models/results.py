@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 import datetime
 from src.models.base import Base
 
+
 class Results(Base):
     __tablename__ = 'results'
     id = Column(Integer, primary_key=True)
@@ -11,5 +12,5 @@ class Results(Base):
     score = Column(Integer)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
-    user = relationship("User", cascade='all, delete-orphan')
+    user = relationship("User")
     quiz = relationship("Quiz")
