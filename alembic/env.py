@@ -5,7 +5,9 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from src.models import Base  # Import your Declarative Base
+from src.core.database import Base
+from src.modules.users.models import User
+from src.modules.quest.models import Quiz, Question, Answer, Results
 
 
 
