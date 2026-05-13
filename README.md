@@ -1,7 +1,7 @@
 # Quiz Site 🎓
 
 A **REST API backend** for an online quiz/test platform built with **FastAPI** and **SQLAlchemy 2.0**. The application supports user registration, JWT-based authentication, and a full quiz flow — creating quizzes, managing questions and answers, and recording results.
-
+### Application created by students
 ---
 
 ## 🛠️ Tech Stack
